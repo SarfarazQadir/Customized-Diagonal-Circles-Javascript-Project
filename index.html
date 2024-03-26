@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customized Diagonal Circles</title>
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body { text-align: center; }
+  #canvas { border: 1px solid black; }
+  #circleForm{
+    margin-top: 80px;
+  }
+</style>
+</head>
+<body>
+<form id="circleForm">
+
+  <div class="form-group">
+
+    <label for="numCircles">Number of Circles:</label>
+    <input type="number" id="numCircles" name="numCircles" min="5" required class="form-control">
+  </div>
+  <div id="colorPickers"></div>
+  
+  <button type="submit" class="btn btn-primary">Draw Circles</button>
+</form>
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<!-- Code for circle drawing -->
+<script>
+  const form = document.getElementById('circleForm');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const colorPickers = document.getElementById('colorPickers');
+
+  // Event listener for form submission to draw circles
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    const numCircles = document.getElementById('numCircles').value;
+    const spacing = (canvas.width - 80) / (numCircles - 1); // Adjust spacing to account for circle size
+    let x = 35; // Start at half the diameter
+    let y = 35; // Start at half the diameter
+
+    // Loop to draw circles based on user input
+    for (let i = 0; i < numCircles; i++) {
+      const color = document.getElementById(`color${i}`).value;
+      ctx.beginPath();
+      ctx.arc(x, y, 35, 0, Math.PI * 2, false); // Set radius to 35px for 70px diameter
+      ctx.fillStyle = color;
+      ctx.fill();
+      x += spacing;
+      y += spacing;
+    }
+  });
+
+  // Event listener for changes in the number of circles input
+  document.getElementById('numCircles').addEventListener('change', function(event) {
+    const numCircles = event.target.value;
+    colorPickers.innerHTML = ''; // Clear existing color pickers
+
+    // Add color pickers based on the number of circles
+    for (let i = 0; i < numCircles; i++) {
+      const colorPicker = document.createElement('input');
+      colorPicker.type = 'color';
+      colorPicker.id = `color${i}`;
+      colorPicker.name = `color${i}`;
+      colorPickers.appendChild(colorPicker);
+    }
+  });
+</script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
